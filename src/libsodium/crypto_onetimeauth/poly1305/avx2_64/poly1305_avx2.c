@@ -6,6 +6,19 @@
 
 #include "../onetimeauth_poly1305.h"
 
+typedef struct poly1305_state_internal_t {
+	unsigned char opaque[192]; /* largest state required (AVX2) */
+	size_t leftover, block_size;
+	unsigned char buffer[64]; /* largest blocksize (AVX2) */
+} poly1305_state_internal;
+
+/* functions implemented in assembly */
+size_t poly1305_block_size_avx2(void);
+void poly1305_init_ext_avx2(void *state, const poly1305_key *key, size_t bytes_hint);
+void poly1305_blocks_avx2(void *state, const unsigned char *in, size_t inlen);
+void poly1305_finish_ext_avx2(void *state, const unsigned char *in, size_t remaining, unsigned char *mac);
+void poly1305_auth_avx2(unsigned char *mac, const unsigned char *m, size_t inlen, const poly1305_key *key);
+
 static void
 poly1305_update(poly1305_state_internal_t *st, const unsigned char *m,
                 unsigned long long bytes)
