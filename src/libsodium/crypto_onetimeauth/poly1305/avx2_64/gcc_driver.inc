@@ -4,7 +4,7 @@
 #include "asmopt_internal.h"
 
 #if (defined(__i386__  ) || defined(__x86_64__))
-	#include "x86/gcc.inc"
+	#include "gcc.inc"
 #endif
 
 #if (defined(__arm__  ) || defined(__aarch64__))
