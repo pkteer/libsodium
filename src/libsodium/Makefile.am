@@ -275,6 +275,8 @@ libavx2_la_SOURCES = \
 	crypto_stream/salsa20/xmm6int/u1.h \
 	crypto_stream/salsa20/xmm6int/u4.h \
 	crypto_stream/salsa20/xmm6int/u8.h \
+	crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2.c \
+	crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2.h \
 	crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2-64.S
 
 libavx512f_la_LDFLAGS = $(libsodium_la_LDFLAGS)
