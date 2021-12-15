@@ -73,6 +73,8 @@ static int
 crypto_onetimeauth_poly1305_avx2_init(crypto_onetimeauth_poly1305_state *state,
                                        const unsigned char *key)
 {
+    COMPILER_ASSERT(sizeof(crypto_onetimeauth_poly1305_state) >=
+                    sizeof(poly1305_state_internal));
     poly1305_init_ext_avx2(state, key, 0);
 
     return 0;
