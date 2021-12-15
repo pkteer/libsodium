@@ -10,6 +10,9 @@
 #if defined(HAVE_TI_MODE) && defined(HAVE_EMMINTRIN_H)
 # include "sse2/poly1305_sse2.h"
 #endif
+#if defined(HAVE_AVX2INTRIN_H)
+# include "avx2_64/poly1305_avx2.h"
+#endif
 
 static const crypto_onetimeauth_poly1305_implementation *implementation =
     &crypto_onetimeauth_poly1305_donna_implementation;
@@ -80,11 +83,18 @@ crypto_onetimeauth_poly1305_keygen(
 int
 _crypto_onetimeauth_poly1305_pick_best_implementation(void)
 {
-    implementation = &crypto_onetimeauth_poly1305_donna_implementation;
+#if defined(HAVE_AVX2INTRIN_H)
+    if (sodium_runtime_has_avx2()) {
+        implementation = &crypto_onetimeauth_poly1305_avx2_implementation;
+        return 0;
+    }
+#endif
 #if defined(HAVE_TI_MODE) && defined(HAVE_EMMINTRIN_H)
     if (sodium_runtime_has_sse2()) {
         implementation = &crypto_onetimeauth_poly1305_sse2_implementation;
+        return 0;
     }
 #endif
+    implementation = &crypto_onetimeauth_poly1305_donna_implementation;
     return 0;
 }
