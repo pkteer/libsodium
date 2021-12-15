@@ -17,7 +17,7 @@ extern "C" {
 #include "export.h"
 
 typedef struct CRYPTO_ALIGN(16) crypto_onetimeauth_poly1305_state {
-    unsigned char opaque[256];
+    unsigned char opaque[256 + 16]; // + 16 for the AVX2 impl.
 } crypto_onetimeauth_poly1305_state;
 
 SODIUM_EXPORT
