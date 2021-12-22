@@ -232,7 +232,9 @@ libavx2_la_LIBADD =
 am_libavx2_la_OBJECTS = crypto_generichash/blake2b/ref/libavx2_la-blake2b-compress-avx2.lo \
 	crypto_pwhash/argon2/libavx2_la-argon2-fill-block-avx2.lo \
 	crypto_stream/chacha20/dolbeau/libavx2_la-chacha20_dolbeau-avx2.lo \
-	crypto_stream/salsa20/xmm6int/libavx2_la-salsa20_xmm6int-avx2.lo
+	crypto_stream/salsa20/xmm6int/libavx2_la-salsa20_xmm6int-avx2.lo \
+	crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2.lo \
+	crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2-64.lo
 libavx2_la_OBJECTS = $(am_libavx2_la_OBJECTS)
 libavx2_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
@@ -568,6 +570,8 @@ am__depfiles_remade = crypto_aead/aes256gcm/aesni/$(DEPDIR)/libaesni_la-aead_aes
 	crypto_kx/$(DEPDIR)/libsodium_la-crypto_kx.Plo \
 	crypto_onetimeauth/$(DEPDIR)/libsodium_la-crypto_onetimeauth.Plo \
 	crypto_onetimeauth/poly1305/$(DEPDIR)/libsodium_la-onetimeauth_poly1305.Plo \
+	crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2-64.Plo \
+	crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2.Plo \
 	crypto_onetimeauth/poly1305/donna/$(DEPDIR)/libsodium_la-poly1305_donna.Plo \
 	crypto_onetimeauth/poly1305/sse2/$(DEPDIR)/libsse2_la-poly1305_sse2.Plo \
 	crypto_pwhash/$(DEPDIR)/libsodium_la-crypto_pwhash.Plo \
@@ -1086,7 +1090,10 @@ libavx2_la_SOURCES = \
 	crypto_stream/salsa20/xmm6int/u0.h \
 	crypto_stream/salsa20/xmm6int/u1.h \
 	crypto_stream/salsa20/xmm6int/u4.h \
-	crypto_stream/salsa20/xmm6int/u8.h
+	crypto_stream/salsa20/xmm6int/u8.h \
+	crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2.c \
+	crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2.h \
+	crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2-64.S
 
 libavx512f_la_LDFLAGS = $(libsodium_la_LDFLAGS)
 libavx512f_la_CPPFLAGS = $(libsodium_la_CPPFLAGS) \
@@ -1223,6 +1230,18 @@ crypto_stream/salsa20/xmm6int/$(DEPDIR)/$(am__dirstamp):
 crypto_stream/salsa20/xmm6int/libavx2_la-salsa20_xmm6int-avx2.lo:  \
 	crypto_stream/salsa20/xmm6int/$(am__dirstamp) \
 	crypto_stream/salsa20/xmm6int/$(DEPDIR)/$(am__dirstamp)
+crypto_onetimeauth/poly1305/avx2_64/$(am__dirstamp):
+	@$(MKDIR_P) crypto_onetimeauth/poly1305/avx2_64
+	@: > crypto_onetimeauth/poly1305/avx2_64/$(am__dirstamp)
+crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)
+	@: > crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/$(am__dirstamp)
+crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2.lo:  \
+	crypto_onetimeauth/poly1305/avx2_64/$(am__dirstamp) \
+	crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/$(am__dirstamp)
+crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2-64.lo:  \
+	crypto_onetimeauth/poly1305/avx2_64/$(am__dirstamp) \
+	crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/$(am__dirstamp)
 
 libavx2.la: $(libavx2_la_OBJECTS) $(libavx2_la_DEPENDENCIES) $(EXTRA_libavx2_la_DEPENDENCIES) 
 	$(AM_V_CCLD)$(libavx2_la_LINK)  $(libavx2_la_OBJECTS) $(libavx2_la_LIBADD) $(LIBS)
@@ -1998,6 +2017,8 @@ mostlyclean-compile:
 	-rm -f crypto_onetimeauth/*.lo
 	-rm -f crypto_onetimeauth/poly1305/*.$(OBJEXT)
 	-rm -f crypto_onetimeauth/poly1305/*.lo
+	-rm -f crypto_onetimeauth/poly1305/avx2_64/*.$(OBJEXT)
+	-rm -f crypto_onetimeauth/poly1305/avx2_64/*.lo
 	-rm -f crypto_onetimeauth/poly1305/donna/*.$(OBJEXT)
 	-rm -f crypto_onetimeauth/poly1305/donna/*.lo
 	-rm -f crypto_onetimeauth/poly1305/sse2/*.$(OBJEXT)
@@ -2124,6 +2145,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@crypto_kx/$(DEPDIR)/libsodium_la-crypto_kx.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@crypto_onetimeauth/$(DEPDIR)/libsodium_la-crypto_onetimeauth.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@crypto_onetimeauth/poly1305/$(DEPDIR)/libsodium_la-onetimeauth_poly1305.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2-64.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@crypto_onetimeauth/poly1305/donna/$(DEPDIR)/libsodium_la-poly1305_donna.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@crypto_onetimeauth/poly1305/sse2/$(DEPDIR)/libsse2_la-poly1305_sse2.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@crypto_pwhash/$(DEPDIR)/libsodium_la-crypto_pwhash.Plo@am__quote@ # am--include-marker
@@ -2225,6 +2248,13 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(LTCPPASCOMPILE) -c -o $@ $<
 
+crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2-64.lo: crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2-64.S
+@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libavx2_la_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2-64.lo -MD -MP -MF crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2-64.Tpo -c -o crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2-64.lo `test -f 'crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2-64.S' || echo '$(srcdir)/'`crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2-64.S
+@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2-64.Tpo crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2-64.Plo
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2-64.S' object='crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2-64.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libavx2_la_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2-64.lo `test -f 'crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2-64.S' || echo '$(srcdir)/'`crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2-64.S
+
 crypto_stream/salsa20/xmm6/libsodium_la-salsa20_xmm6-asm.lo: crypto_stream/salsa20/xmm6/salsa20_xmm6-asm.S
 @am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libsodium_la_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT crypto_stream/salsa20/xmm6/libsodium_la-salsa20_xmm6-asm.lo -MD -MP -MF crypto_stream/salsa20/xmm6/$(DEPDIR)/libsodium_la-salsa20_xmm6-asm.Tpo -c -o crypto_stream/salsa20/xmm6/libsodium_la-salsa20_xmm6-asm.lo `test -f 'crypto_stream/salsa20/xmm6/salsa20_xmm6-asm.S' || echo '$(srcdir)/'`crypto_stream/salsa20/xmm6/salsa20_xmm6-asm.S
 @am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) crypto_stream/salsa20/xmm6/$(DEPDIR)/libsodium_la-salsa20_xmm6-asm.Tpo crypto_stream/salsa20/xmm6/$(DEPDIR)/libsodium_la-salsa20_xmm6-asm.Plo
@@ -2297,6 +2327,13 @@ crypto_stream/salsa20/xmm6int/libavx2_la-salsa20_xmm6int-avx2.lo: crypto_stream/
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='crypto_stream/salsa20/xmm6int/salsa20_xmm6int-avx2.c' object='crypto_stream/salsa20/xmm6int/libavx2_la-salsa20_xmm6int-avx2.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libavx2_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o crypto_stream/salsa20/xmm6int/libavx2_la-salsa20_xmm6int-avx2.lo `test -f 'crypto_stream/salsa20/xmm6int/salsa20_xmm6int-avx2.c' || echo '$(srcdir)/'`crypto_stream/salsa20/xmm6int/salsa20_xmm6int-avx2.c
+
+crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2.lo: crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libavx2_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2.lo -MD -MP -MF crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2.Tpo -c -o crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2.lo `test -f 'crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2.c' || echo '$(srcdir)/'`crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2.Tpo crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2.c' object='crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libavx2_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o crypto_onetimeauth/poly1305/avx2_64/libavx2_la-poly1305_avx2.lo `test -f 'crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2.c' || echo '$(srcdir)/'`crypto_onetimeauth/poly1305/avx2_64/poly1305_avx2.c
 
 crypto_pwhash/argon2/libavx512f_la-argon2-fill-block-avx512f.lo: crypto_pwhash/argon2/argon2-fill-block-avx512f.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libavx512f_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT crypto_pwhash/argon2/libavx512f_la-argon2-fill-block-avx512f.lo -MD -MP -MF crypto_pwhash/argon2/$(DEPDIR)/libavx512f_la-argon2-fill-block-avx512f.Tpo -c -o crypto_pwhash/argon2/libavx512f_la-argon2-fill-block-avx512f.lo `test -f 'crypto_pwhash/argon2/argon2-fill-block-avx512f.c' || echo '$(srcdir)/'`crypto_pwhash/argon2/argon2-fill-block-avx512f.c
@@ -3039,6 +3076,7 @@ clean-libtool:
 	-rm -rf crypto_kx/.libs crypto_kx/_libs
 	-rm -rf crypto_onetimeauth/.libs crypto_onetimeauth/_libs
 	-rm -rf crypto_onetimeauth/poly1305/.libs crypto_onetimeauth/poly1305/_libs
+	-rm -rf crypto_onetimeauth/poly1305/avx2_64/.libs crypto_onetimeauth/poly1305/avx2_64/_libs
 	-rm -rf crypto_onetimeauth/poly1305/donna/.libs crypto_onetimeauth/poly1305/donna/_libs
 	-rm -rf crypto_onetimeauth/poly1305/sse2/.libs crypto_onetimeauth/poly1305/sse2/_libs
 	-rm -rf crypto_pwhash/.libs crypto_pwhash/_libs
@@ -3352,6 +3390,8 @@ distclean-generic:
 	-rm -f crypto_onetimeauth/$(am__dirstamp)
 	-rm -f crypto_onetimeauth/poly1305/$(DEPDIR)/$(am__dirstamp)
 	-rm -f crypto_onetimeauth/poly1305/$(am__dirstamp)
+	-rm -f crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/$(am__dirstamp)
+	-rm -f crypto_onetimeauth/poly1305/avx2_64/$(am__dirstamp)
 	-rm -f crypto_onetimeauth/poly1305/donna/$(DEPDIR)/$(am__dirstamp)
 	-rm -f crypto_onetimeauth/poly1305/donna/$(am__dirstamp)
 	-rm -f crypto_onetimeauth/poly1305/sse2/$(DEPDIR)/$(am__dirstamp)
@@ -3484,6 +3524,8 @@ distclean: distclean-recursive
 	-rm -f crypto_kx/$(DEPDIR)/libsodium_la-crypto_kx.Plo
 	-rm -f crypto_onetimeauth/$(DEPDIR)/libsodium_la-crypto_onetimeauth.Plo
 	-rm -f crypto_onetimeauth/poly1305/$(DEPDIR)/libsodium_la-onetimeauth_poly1305.Plo
+	-rm -f crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2-64.Plo
+	-rm -f crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2.Plo
 	-rm -f crypto_onetimeauth/poly1305/donna/$(DEPDIR)/libsodium_la-poly1305_donna.Plo
 	-rm -f crypto_onetimeauth/poly1305/sse2/$(DEPDIR)/libsse2_la-poly1305_sse2.Plo
 	-rm -f crypto_pwhash/$(DEPDIR)/libsodium_la-crypto_pwhash.Plo
@@ -3637,6 +3679,8 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f crypto_kx/$(DEPDIR)/libsodium_la-crypto_kx.Plo
 	-rm -f crypto_onetimeauth/$(DEPDIR)/libsodium_la-crypto_onetimeauth.Plo
 	-rm -f crypto_onetimeauth/poly1305/$(DEPDIR)/libsodium_la-onetimeauth_poly1305.Plo
+	-rm -f crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2-64.Plo
+	-rm -f crypto_onetimeauth/poly1305/avx2_64/$(DEPDIR)/libavx2_la-poly1305_avx2.Plo
 	-rm -f crypto_onetimeauth/poly1305/donna/$(DEPDIR)/libsodium_la-poly1305_donna.Plo
 	-rm -f crypto_onetimeauth/poly1305/sse2/$(DEPDIR)/libsse2_la-poly1305_sse2.Plo
 	-rm -f crypto_pwhash/$(DEPDIR)/libsodium_la-crypto_pwhash.Plo
