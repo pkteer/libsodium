@@ -76,6 +76,9 @@ crypto_onetimeauth_poly1305_avx2_init(crypto_onetimeauth_poly1305_state *state,
     COMPILER_ASSERT(sizeof(crypto_onetimeauth_poly1305_state) >=
                     sizeof(poly1305_state_internal));
     poly1305_init_ext_avx2(state, key, 0);
+    poly1305_state_internal* st_internal = (poly1305_state_internal*) state;
+	st_internal->leftover = 0;
+	st_internal->block_size = poly1305_block_size_avx2();
 
     return 0;
 }
