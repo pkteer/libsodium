@@ -10,7 +10,7 @@
 #if defined(HAVE_TI_MODE) && defined(HAVE_EMMINTRIN_H)
 # include "sse2/poly1305_sse2.h"
 #endif
-#if defined(HAVE_AVX2INTRIN_H)
+#if defined(HAVE_AVX_ASM)
 # include "avx2_64/poly1305_avx2.h"
 #endif
 
@@ -83,7 +83,7 @@ crypto_onetimeauth_poly1305_keygen(
 int
 _crypto_onetimeauth_poly1305_pick_best_implementation(void)
 {
-#if defined(HAVE_AVX2INTRIN_H)
+#if defined(HAVE_AVX_ASM)
     if (sodium_runtime_has_avx2()) {
         implementation = &crypto_onetimeauth_poly1305_avx2_implementation;
         return 0;
